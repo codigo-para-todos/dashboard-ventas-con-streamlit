@@ -1,5 +1,6 @@
 import pandas as pd
 import streamlit as st
+import plotly.express as px
 
 # ---- Configurar streamlit ----
 st.set_page_config(page_title="Cuadro de mandos de ventas",
@@ -75,6 +76,31 @@ with columna_derecha:
     st.subheader("Venta media por transacción:")
     st.subheader(f"US $ {venta_media_por_transaccion}")
 
+st.markdown("""---""")
+
 # ---- Mostrar Dataframe en streamlit ----
-st.dataframe(df_selection)
+#st.dataframe(df_selection)
+
+# ---- Mostrar ventas por línea de producto (gráfico de barras) en streamlit ----
+ventas_por_linea_de_producto = (
+    df_selection.groupby(by=["Product line"])[["Total"]].sum().sort_values(by="Total")
+)
+
+grafico_ventas_por_linea_de_producto = px.bar(
+    ventas_por_linea_de_producto,
+    x="Total",
+    y=ventas_por_linea_de_producto.index,
+    orientation="h",
+    title="<b>Ventas por línea de producto</b>",
+    color_discrete_sequence=["#0083B8"] * len(ventas_por_linea_de_producto),
+    template="plotly_white",
+)
+
+# ---- Fondo transparente en gráfico de barras ----
+grafico_ventas_por_linea_de_producto.update_layout(
+    plot_bgcolor="rgba(0,0,0,0)",
+    xaxis=(dict(showgrid=False))
+)
+
+st.plotly_chart(grafico_ventas_por_linea_de_producto)
 
