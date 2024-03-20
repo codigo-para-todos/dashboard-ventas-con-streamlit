@@ -124,4 +124,7 @@ grafico_ventas_por_horas.update_layout(
     yaxis=(dict(showgrid=False)),
 )
 
-st.plotly_chart(grafico_ventas_por_horas)
+# ---- Mostrar 2 gráficos de ventas en la misma línea
+columna_izquierda, columna_derecha = st.columns(2)
+columna_izquierda.plotly_chart(grafico_ventas_por_horas, use_container_width=True)
+columna_derecha.plotly_chart(grafico_ventas_por_linea_de_producto, use_container_width=True)
