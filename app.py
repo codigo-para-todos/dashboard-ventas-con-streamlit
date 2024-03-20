@@ -9,6 +9,7 @@ st.set_page_config(page_title="Cuadro de mandos de ventas",
 
 
 # ---- Leer archivo excel ----
+@st.cache_data
 def get_data_from_excel():
     df = pd.read_excel(
         io="supermarkt_sales.xlsx",
@@ -18,6 +19,9 @@ def get_data_from_excel():
         usecols="B:R",
         nrows=1000,
     )
+
+    # Añadir columna 'hour' al Dataframe
+    df["hour"] = pd.to_datetime(df["Time"], format="%H:%M:%S").dt.hour
 
     return df
 
@@ -104,3 +108,20 @@ grafico_ventas_por_linea_de_producto.update_layout(
 
 st.plotly_chart(grafico_ventas_por_linea_de_producto)
 
+# ---- Mostrar ventas por hora (gráfico de barras) en streamlit ----
+ventas_por_hora = df_selection.groupby(by=["hour"])[["Total"]].sum()
+grafico_ventas_por_horas = px.bar(
+    ventas_por_hora,
+    x=ventas_por_hora.index,
+    y="Total",
+    title="<b>Ventas por hora</b>",
+    color_discrete_sequence=["#0083B8"] * len(ventas_por_hora),
+    template="plotly_white",
+)
+grafico_ventas_por_horas.update_layout(
+    xaxis=dict(tickmode="linear"),
+    plot_bgcolor="rgba(0,0,0,0)",
+    yaxis=(dict(showgrid=False)),
+)
+
+st.plotly_chart(grafico_ventas_por_horas)
