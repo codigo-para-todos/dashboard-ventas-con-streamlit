@@ -128,3 +128,13 @@ grafico_ventas_por_horas.update_layout(
 columna_izquierda, columna_derecha = st.columns(2)
 columna_izquierda.plotly_chart(grafico_ventas_por_horas, use_container_width=True)
 columna_derecha.plotly_chart(grafico_ventas_por_linea_de_producto, use_container_width=True)
+
+# ---- Ocultar los estilos por defecto de streamlit ----
+ocultar_estilo_streamlit = """
+            <style>
+            #MainMenu {visibility: hidden;}
+            footer {visibility: hidden;}
+            header {visibility: hidden;}
+            </style>
+            """
+st.markdown(ocultar_estilo_streamlit, unsafe_allow_html=True)
