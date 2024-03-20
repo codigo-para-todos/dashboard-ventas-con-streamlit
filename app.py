@@ -1,6 +1,11 @@
-from _ast import pattern
-
 import pandas as pd
+import streamlit as st
+
+# ---- Configurar streamlit ----
+st.set_page_config(page_title="Cuadro de mandos de ventas",
+                   page_icon="📊",
+                   layout="wide")
+
 
 # ---- Leer archivo excel ----
 def get_data_from_excel():
@@ -15,8 +20,9 @@ def get_data_from_excel():
 
     return df
 
-# Obtener Dataframe
+
+# ---- Obtener Dataframe ----
 df = get_data_from_excel()
 
-# Imprimir Dataframe
-print(df)
+# ---- Mostrar Dataframe en streamlit ----
+st.dataframe(df)
